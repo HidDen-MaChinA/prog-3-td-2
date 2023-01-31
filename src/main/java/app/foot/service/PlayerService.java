@@ -18,14 +18,22 @@ public class PlayerService {
     public List<Player> getPlayers() {
         return repository.findAll().stream()
                 .map(mapper::toDomain)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     public List<Player> createPlayers(List<Player> toCreate) {
         return repository.saveAll(toCreate.stream()
                         .map(mapper::toEntity)
-                        .collect(Collectors.toUnmodifiableList())).stream()
+                        .toList()).stream()
                 .map(mapper::toDomain)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
+    }
+
+    public List<Player> putPlayer(List<Player> toChange){
+        return repository.saveAll(toChange.stream()
+                        .map(mapper::toRest)
+                        .toList()).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

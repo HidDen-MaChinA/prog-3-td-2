@@ -25,7 +25,7 @@ values (1, 1, 1, 10, false),
        (5, 1, 3, 50, false),
        (6, 1, 4, 60, true);
 
--- Score : E2 2 vs 0 E2
+-- Score : E2 2 vs 0 E3
 insert into player_score(id, id_match, id_player, "minute", own_goal)
 values (7, 2, 3, 70, false),
        (8, 2, 6, 80, true);
