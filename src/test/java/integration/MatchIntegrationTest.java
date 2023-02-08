@@ -2,8 +2,10 @@ package integration;
 
 import app.foot.FootApi;
 import app.foot.controller.rest.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,17 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = FootApi.class)
 @AutoConfigureMockMvc
+@Slf4j
 class MatchIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -91,6 +96,7 @@ class MatchIntegrationTest {
         toReturn.add(expectedMatch3());
         return toReturn;
     }
+
     private static Match expectedMatch2() {
         return Match.builder()
                 .id(2)
@@ -243,6 +249,7 @@ class MatchIntegrationTest {
         return Player.builder()
                 .id(6)
                 .name("J6")
+                .teamName("E3")
                 .isGuardian(false)
                 .teamName(team3().getName())
                 .build();
@@ -267,6 +274,7 @@ class MatchIntegrationTest {
         return Player.builder()
                 .id(3)
                 .name("J3")
+                .teamName("E2")
                 .isGuardian(false)
                 .teamName(team2().getName())
                 .build();
@@ -292,6 +300,13 @@ class MatchIntegrationTest {
                 .name("E1")
                 .build();
     }
+    private List<Match> convertFromHttpResponse(MockHttpServletResponse response)
+            throws JsonProcessingException, UnsupportedEncodingException {
+        CollectionType playerListType = objectMapper.getTypeFactory()
+                .constructCollectionType(List.class, Match.class);
+        return objectMapper.readValue(
+                response.getContentAsString(),
+                playerListType);}
     void read_read_match_ok (){
 
     }
