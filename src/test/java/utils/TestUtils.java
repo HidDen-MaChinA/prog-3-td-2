@@ -101,4 +101,12 @@ public class TestUtils {
         Throwable exception = assertThrows(exceptionClass, executable);
         assertEquals(message, exception.getMessage());
     }
+    public static PlayerEntity MockedPlayerForToEntityTest(TeamEntity team){
+        return PlayerEntity.builder()
+                .team(team)
+                .guardian(false)
+                .name("P1")
+                .id(2)
+                .build();
+    }
 }

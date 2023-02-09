@@ -87,7 +87,26 @@ class PlayerIntegrationTest {
         assertEquals(1, actual.size());
         assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
     }
+    @Test
+    void put_players_ok() throws Exception {
+        Player toPut = Player.builder()
+                .id(6)
+                .name("Joe Doe")
+                .isGuardian(false)
+                .teamName("E1")
+                .build();
+        MockHttpServletResponse response = mockMvc
+                .perform(post("/players")
+                        .content(objectMapper.writeValueAsString(List.of(toPut)))
+                        .contentType("application/json")
+                        .accept("application/json"))
+                .andReturn()
+                .getResponse();
+        List<Player> actual = convertFromHttpResponse(response);
 
+        assertEquals(1, actual.size());
+        assertEquals(List.of(toPut),actual);
+    }
     private List<Player> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
         CollectionType playerListType = objectMapper.getTypeFactory()

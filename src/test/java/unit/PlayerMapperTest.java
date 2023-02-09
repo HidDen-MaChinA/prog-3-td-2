@@ -8,8 +8,10 @@ import app.foot.repository.TeamRepository;
 import app.foot.repository.entity.MatchEntity;
 import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.entity.PlayerScoreEntity;
+import app.foot.repository.entity.TeamEntity;
 import app.foot.repository.mapper.PlayerMapper;
 import org.junit.jupiter.api.Test;
+import utils.TestUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -64,7 +66,26 @@ public class PlayerMapperTest {
 
         assertEquals(rakotoScorer(), actual);
     }
-
+    @Test
+    void to_entity_test_ok() {
+        PlayerEntity forTest=subject.toEntity(Player.builder()
+                        .teamName("E1")
+                        .name("P1")
+                        .id(2)
+                        .isGuardian(false)
+                .build());
+        assertEquals(TestUtils.MockedPlayerForToEntityTest(TeamEntity.builder().id(1).name("E1").build()),forTest);
+    }
+    @Test
+    void to_entity_test_with_not_team() {
+        PlayerEntity forTest=subject.toEntity(Player.builder()
+                .teamName("E5")
+                .name("P1")
+                .id(2)
+                .isGuardian(false)
+                .build());
+        assertEquals(TestUtils.MockedPlayerForToEntityTest(null),forTest);
+    }
     @Test
     void player_scorer_to_entity_ok() {
         Instant now = Instant.now();
