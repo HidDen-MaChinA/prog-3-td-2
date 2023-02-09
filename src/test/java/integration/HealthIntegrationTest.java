@@ -24,7 +24,6 @@ public class HealthIntegrationTest {
         MockHttpServletResponse response = mockMvc.perform(get("/ping"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
-
         assertEquals("pong", response.getContentAsString());
     }
 }
